@@ -4,6 +4,8 @@ Welcome to my technical repository. This project serves as a practical showcase 
 
 ## 👤 About Me
 
+*Updated on 2026-01-23*
+
 * **Certifications:** Google Cybersecurity Professional, ISC2 Certified in Cybersecurity (CC).
 * **Background:** 4 years of Fullstack Dev (PHP/Symfony) + Network Networking student.
 * **Objective:** Junior Security Analyst focused on SOC operations and automation.
