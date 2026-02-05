@@ -1,0 +1,47 @@
+# Threat Intelligence Log Parser - Dependencies
+# ===============================================
+# 
+# This project uses only Python standard library modules.
+# No external dependencies are required for core functionality.
+#
+# However, for enhanced functionality, you may optionally install:
+#
+# For faster HTTP requests:
+# requests>=2.31.0
+#
+# For enhanced logging:
+# colorlog>=6.7.0
+#
+# For YAML configuration support:
+# PyYAML>=6.0
+#
+# For IPv6 address validation (more robust than stdlib):
+# ipaddress>=1.0.0
+#
+# For concurrent API queries (async support):
+# aiohttp>=3.9.0
+#
+# =============================================================================
+# Production Requirements (Standard Library Only)
+# =============================================================================
+# Python 3.8+ is required.
+# All dependencies below are part of the Python standard library:
+#
+# - argparse      : Command-line argument parsing
+# - dataclasses   : Data class decorators (Python 3.7+)
+# - datetime      : Date and time handling
+# - hashlib       : Cryptographic hashing
+# - json          : JSON encoding/decoding
+# - logging       : Logging framework
+# - re            : Regular expressions
+# - threading     : Thread-based parallelism
+# - time          : Time-related functions
+# - typing        : Type hints support
+# - urllib.parse  : URL parsing
+# - urllib.request: URL opening and reading
+# - pathlib       : Object-oriented filesystem paths
+# - collections   : Specialized container datatypes
+# =============================================================================
+
+# This file is intentionally minimal since no external packages are required.
+# The script works out-of-the-box with a standard Python 3 installation.

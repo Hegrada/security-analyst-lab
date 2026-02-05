@@ -1,0 +1,196 @@
+{
+    "report_metadata": {
+        "analysis_id": "a1b2c3d4e5f6",
+        "generated_at": "2024-01-15T14:30:00.000Z",
+        "tool_version": "1.0.0",
+        "tool_name": "Threat Intelligence Log Parser"
+    },
+    "summary": {
+        "total_entries": 1500,
+        "unique_ips": 45,
+        "flagged_ips": 8,
+        "malicious_ips": 3,
+        "high_risk_ips": 2,
+        "status_code_distribution": {
+            "200": 1200,
+            "301": 100,
+            "302": 50,
+            "400": 30,
+            "401": 50,
+            "403": 20,
+            "404": 30,
+            "500": 20
+        },
+        "apis_queried": [
+            "abuseipdb",
+            "virustotal"
+        ]
+    },
+    "threat_intelligence": {
+        "192.168.1.100": {
+            "abuseipdb": {
+                "ip_address": "192.168.1.100",
+                "abuse_confidence_score": 0,
+                "country_code": "US",
+                "country_name": "United States",
+                "is_whitelisted": true,
+                "total_reports": 0,
+                "num_distinct_users": 5,
+                "last_reported_at": null,
+                "categories": []
+            },
+            "virustotal": {
+                "ip_address": "192.168.1.100",
+                "harmless": 5,
+                "malicious": 0,
+                "suspicious": 0,
+                "undetected": 10,
+                "total_votes": {
+                    "harmless": 0,
+                    "malicious": 0
+                },
+                "reputation": 0,
+                "last_analysis_date": "2024-01-10T12:00:00"
+            }
+        },
+        "203.0.113.42": {
+            "abuseipdb": {
+                "ip_address": "203.0.113.42",
+                "abuse_confidence_score": 95,
+                "country_code": "CN",
+                "country_name": "China",
+                "is_whitelisted": false,
+                "total_reports": 45,
+                "num_distinct_users": 12,
+                "last_reported_at": "2024-01-14T08:30:00",
+                "categories": [
+                    18,
+                    22,
+                    15
+                ]
+            },
+            "virustotal": {
+                "ip_address": "203.0.113.42",
+                "harmless": 1,
+                "malicious": 8,
+                "suspicious": 2,
+                "undetected": 5,
+                "total_votes": {
+                    "harmless": 0,
+                    "malicious": 3
+                },
+                "reputation": -5,
+                "last_analysis_date": "2024-01-15T10:00:00"
+            }
+        },
+        "198.51.100.25": {
+            "abuseipdb": {
+                "ip_address": "198.51.100.25",
+                "abuse_confidence_score": 75,
+                "country_code": "RU",
+                "country_name": "Russia",
+                "is_whitelisted": false,
+                "total_reports": 28,
+                "num_distinct_users": 8,
+                "last_reported_at": "2024-01-13T15:45:00",
+                "categories": [
+                    21,
+                    14,
+                    18
+                ]
+            },
+            "virustotal": {
+                "ip_address": "198.51.100.25",
+                "harmless": 2,
+                "malicious": 5,
+                "suspicious": 1,
+                "undetected": 8,
+                "total_votes": {
+                    "harmless": 0,
+                    "malicious": 2
+                },
+                "reputation": -3,
+                "last_analysis_date": "2024-01-14T18:20:00"
+            }
+        },
+        "185.220.101.46": {
+            "abuseipdb": {
+                "ip_address": "185.220.101.46",
+                "abuse_confidence_score": 100,
+                "country_code": "DE",
+                "country_name": "Germany",
+                "is_whitelisted": false,
+                "total_reports": 156,
+                "num_distinct_users": 45,
+                "last_reported_at": "2024-01-15T06:00:00",
+                "categories": [
+                    18,
+                    19,
+                    21,
+                    22,
+                    15
+                ]
+            },
+            "virustotal": {
+                "ip_address": "185.220.101.46",
+                "harmless": 0,
+                "malicious": 12,
+                "suspicious": 3,
+                "undetected": 2,
+                "total_votes": {
+                    "harmless": 0,
+                    "malicious": 5
+                },
+                "reputation": -10,
+                "last_analysis_date": "2024-01-15T12:00:00"
+            }
+        }
+    },
+    "log_entries": [
+        {
+            "line_number": 1,
+            "raw": "203.0.113.42 - - [15/Jan/2024:10:00:00 +0000] \"GET /admin.php HTTP/1.1\" 200 4523",
+            "timestamp": "2024-01-15T10:00:00",
+            "ip_address": "203.0.113.42",
+            "status_code": 200,
+            "response_size": 4523,
+            "user_agent": null
+        },
+        {
+            "line_number": 2,
+            "raw": "203.0.113.42 - - [15/Jan/2024:10:00:05 +0000] \"POST /admin.php?action=login HTTP/1.1\" 401 521",
+            "timestamp": "2024-01-15T10:00:05",
+            "ip_address": "203.0.113.42",
+            "status_code": 401,
+            "response_size": 521,
+            "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        },
+        {
+            "line_number": 3,
+            "raw": "198.51.100.25 - - [15/Jan/2024:10:01:30 +0000] \"GET /wp-admin/ HTTP/1.1\" 404 365",
+            "timestamp": "2024-01-15T10:01:30",
+            "ip_address": "198.51.100.25",
+            "status_code": 404,
+            "response_size": 365,
+            "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+        },
+        {
+            "line_number": 4,
+            "raw": "185.220.101.46 - - [15/Jan/2024:10:02:15 +0000] \"GET /phpmyadmin/ HTTP/1.1\" 403 289",
+            "timestamp": "2024-01-15T10:02:15",
+            "ip_address": "185.220.101.46",
+            "status_code": 403,
+            "response_size": 289,
+            "user_agent": null
+        },
+        {
+            "line_number": 5,
+            "raw": "203.0.113.42 - - [15/Jan/2024:10:03:00 +0000] \"POST /admin.php?action=login HTTP/1.1\" 200 2156",
+            "timestamp": "2024-01-15T10:03:00",
+            "ip_address": "203.0.113.42",
+            "status_code": 200,
+            "response_size": 2156,
+            "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        }
+    ]
+}
