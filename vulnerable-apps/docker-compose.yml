@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # Vulnerable Web Application (OWASP Top 10)
+  webapp:
+    build: ./web-app
+    container_name: vuln-webapp
+    ports:
+      - "8080:5000"
+    environment:
+      - FLASK_ENV=development
+      - SECRET_KEY=very_secret_key_123
+      - DATABASE_URL=mysql://root:toor@db/users
+    depends_on:
+      - db
+    networks:
+      - vulnnet
+    restart: unless-stopped
+
+  # Vulnerable MySQL Database
+  db:
+    image: mysql:5.7
+    container_name: vuln-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=toor
+      - MYSQL_DATABASE=users
+      - MYSQL_USER=web
+      - MYSQL_PASSWORD=web
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/my.cnf:/etc/mysql/conf.d/my.cnf
+    command: --skip-secure-authentication --log-error=/var/log/mysql/error.log
+    networks:
+      - vulnnet
+    restart: unless-stopped
+
+  # Vulnerable REST API
+  api:
+    build: ./api
+    container_name: vuln-api
+    ports:
+      - "5000:5000"
+    environment:
+      - API_KEY=secret_api_key_123
+      - ADMIN_PASSWORD=admin123
+    networks:
+      - vulnnet
+    restart: unless-stopped
+
+  # Vulnerable FTP Server
+  ftp:
+    image: fauria/vsftpd:latest
+    container_name: vuln-ftp
+    ports:
+      - "21:21"
+      - "40000-40100:40000-40100"
+    environment:
+      - FTP_USER=anonymous
+      - FTP_PASS=anonymous
+      - PASV_MIN_PORT=40000
+      - PASV_MAX_PORT=40100
+    volumes:
+      - ftp_data:/var/www/html
+      - ./ftp/vsftpd.conf:/etc/vsftpd/vsftpd.conf:ro
+    networks:
+      - vulnnet
+    restart: unless-stopped
+
+  # Vulnerable SSH Server
+  ssh:
+    build: ./ssh
+    container_name: vuln-ssh
+    ports:
+      - "2222:22"
+    environment:
+      - ROOT_PASSWORD=toor
+    networks:
+      - vulnnet
+    restart: unless-stopped
+
+networks:
+  vulnnet:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  ftp_data:

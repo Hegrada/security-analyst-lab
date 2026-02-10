@@ -1,0 +1,143 @@
+{% extends "base.html" %} {% block title %}Scan #{{ scan.id }} - Security Audit
+Dashboard{% endblock %} {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="fas fa-search"></i> Scan #{{ scan.id }}</h2>
+  <a href="/scans" class="btn btn-outline-secondary">
+    <i class="fas fa-arrow-left"></i> Back to Scans
+  </a>
+</div>
+
+<!-- Scan Info -->
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Scan Information</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-borderless mb-0">
+          <tr>
+            <td><strong>Type:</strong></td>
+            <td>{{ scan.scan_type }}</td>
+          </tr>
+          <tr>
+            <td><strong>Target:</strong></td>
+            <td>{{ scan.target }}</td>
+          </tr>
+          <tr>
+            <td><strong>Start Time:</strong></td>
+            <td>{{ scan.start_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          </tr>
+          <tr>
+            <td><strong>End Time:</strong></td>
+            <td>
+              {{ scan.end_time.strftime('%Y-%m-%d %H:%M:%S') if scan.end_time
+              else '-' }}
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Duration:</strong></td>
+            <td>{{ "%.2f"|format(scan.duration) }}s</td>
+          </tr>
+          <tr>
+            <td><strong>Status:</strong></td>
+            <td>
+              {% if scan.status == 'completed' %}
+              <span class="badge bg-success">Completed</span>
+              {% elif scan.status == 'running' %}
+              <span class="badge bg-warning">Running</span>
+              {% else %}
+              <span class="badge bg-danger">Failed</span>
+              {% endif %}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Summary</h5>
+      </div>
+      <div class="card-body">
+        <div class="row text-center">
+          <div class="col-4">
+            <h4 class="text-danger">
+              {{ vulnerabilities|selectattr('severity', 'equalto',
+              'Critical')|list|length }}
+            </h4>
+            <small>Critical</small>
+          </div>
+          <div class="col-4">
+            <h4 class="text-warning">
+              {{ vulnerabilities|selectattr('severity', 'equalto',
+              'High')|list|length }}
+            </h4>
+            <small>High</small>
+          </div>
+          <div class="col-4">
+            <h4 class="text-info">
+              {{ vulnerabilities|selectattr('severity', 'equalto',
+              'Medium')|list|length }}
+            </h4>
+            <small>Medium</small>
+          </div>
+        </div>
+        <hr />
+        <p class="mb-0 text-center">
+          <strong>Total Vulnerabilities:</strong> {{ vulnerabilities|length }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Vulnerabilities -->
+<div class="card">
+  <div class="card-header">
+    <h5 class="mb-0">Vulnerabilities Found</h5>
+  </div>
+  <div class="card-body table-card">
+    {% if vulnerabilities %}
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Severity</th>
+          <th>CVSS</th>
+          <th>Description</th>
+          <th>Remediation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for vuln in vulnerabilities %}
+        <tr>
+          <td>{{ vuln.title }}</td>
+          <td>
+            <span class="severity-badge {{ vuln.severity|lower }}">
+              {{ vuln.severity }}
+            </span>
+          </td>
+          <td>{{ vuln.cvss }}</td>
+          <td>
+            {{ vuln.description[:100] }}{{ '...' if vuln.description|length >
+            100 else '' }}
+          </td>
+          <td>
+            {{ vuln.remediation[:100] }}{{ '...' if vuln.remediation|length >
+            100 else '' }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-center text-muted py-4">
+      No vulnerabilities found in this scan.
+    </p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

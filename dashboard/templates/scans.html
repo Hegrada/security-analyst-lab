@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% block title %}Scans - Security Audit Dashboard{%
+endblock %} {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="fas fa-search"></i> Security Scans</h2>
+</div>
+
+<div class="card">
+  <div class="card-body table-card">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Target</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Duration</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for scan in scans %}
+        <tr>
+          <td>{{ scan.id }}</td>
+          <td>
+            <span class="badge bg-info">{{ scan.scan_type }}</span>
+          </td>
+          <td>{{ scan.target }}</td>
+          <td>{{ scan.start_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td>
+            {{ scan.end_time.strftime('%Y-%m-%d %H:%M:%S') if scan.end_time else
+            '-' }}
+          </td>
+          <td>{{ "%.2f"|format(scan.duration) }}s</td>
+          <td>
+            {% if scan.status == 'completed' %}
+            <span class="badge bg-success">Completed</span>
+            {% elif scan.status == 'running' %}
+            <span class="badge bg-warning">Running</span>
+            {% else %}
+            <span class="badge bg-danger">Failed</span>
+            {% endif %}
+          </td>
+          <td>
+            <a
+              href="/scan/{{ scan.id }}"
+              class="btn btn-sm btn-outline-primary"
+            >
+              <i class="fas fa-eye"></i> View
+            </a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="8" class="text-center text-muted">No scans found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %} {% block title %}Vulnerabilities - Security Audit
+Dashboard{% endblock %} {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="fas fa-bug"></i> Vulnerabilities</h2>
+
+  {% if filter %}
+  <div>
+    <span class="me-2">Filter:</span>
+    <a href="/vulnerabilities" class="btn btn-sm btn-outline-secondary">All</a>
+    <a href="/vulnerabilities?severity=critical" class="btn btn-sm btn-danger"
+      >Critical</a
+    >
+    <a href="/vulnerabilities?severity=high" class="btn btn-sm btn-warning"
+      >High</a
+    >
+    <a
+      href="/vulnerabilities?severity=medium"
+      class="btn btn-sm"
+      style="background: #f1c40f"
+      >Medium</a
+    >
+  </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-body table-card">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Scan ID</th>
+          <th>Title</th>
+          <th>Severity</th>
+          <th>CVSS</th>
+          <th>Found</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for vuln in vulnerabilities %}
+        <tr>
+          <td>{{ vuln.id }}</td>
+          <td>
+            <a href="/scan/{{ vuln.scan_id }}">{{ vuln.scan_id }}</a>
+          </td>
+          <td>{{ vuln.title }}</td>
+          <td>
+            <span class="severity-badge {{ vuln.severity|lower }}">
+              {{ vuln.severity }}
+            </span>
+          </td>
+          <td>{{ vuln.cvss }}</td>
+          <td>{{ vuln.created_at.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" class="text-center text-muted">
+            No vulnerabilities found{% if filter %} with filter '{{ filter }}'{%
+            endif %}.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
