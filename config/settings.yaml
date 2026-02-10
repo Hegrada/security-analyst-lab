@@ -1,0 +1,113 @@
+# Security Audit Lab Configuration
+# =====================================
+
+# General Settings
+app:
+  name: "Security Audit Lab"
+  version: "1.0.0"
+  environment: "development"  # development, staging, production
+  debug: true
+
+# Port Scanner Configuration
+port_scanner:
+  default_threads: 100
+  default_timeout: 2
+  common_ports_only: true
+  banner_grabbing: true
+  service_detection: true
+
+# Vulnerability Scanner Configuration
+vuln_scanner:
+  check_owasp_top_10: true
+  timeout: 10
+  max_concurrent_requests: 10
+  follow_redirects: true
+
+# Log Analyzer Configuration
+log_analyzer:
+  anomaly_detection: true
+  ml_model: "isolation_forest"
+  severity_threshold: "medium"
+  auto_report: false
+
+# SQL Injection Tester
+sql_injection:
+  test_union: true
+  test_error: true
+  test_boolean: true
+  test_time: true
+  payloads_per_type: 10
+
+# Network Enumeration
+network_enum:
+  ping_sweep: true
+  port_scan: true
+  os_detection: true
+  default_ports: "1-1024"
+
+# Report Generator
+reports:
+  output_format: "html"
+  template: "professional"
+  include_evidence: true
+  include_recommendations: true
+
+# Dashboard Configuration
+dashboard:
+  host: "0.0.0.0"
+  port: 5000
+  secret_key: "dev-secret-key-change-in-production"
+  database_url: "sqlite:///scans.db"
+  auto_refresh: 30
+
+# Vulnerable Applications
+vulnerable_apps:
+  enabled: true
+  webapp:
+    host: "0.0.0.0"
+    port: 8080
+    debug: true
+  database:
+    host: "db"
+    port: 3306
+    user: "root"
+    password: "toor"  # Weak password for testing
+  api:
+    host: "0.0.0.0"
+    port: 5000
+
+# Docker Configuration
+docker:
+  network_name: "vulnnet"
+  volumes:
+    - "./data:/app/data"
+  restart_policy: "unless-stopped"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/security_audit.log"
+  max_size: "10MB"
+  backup_count: 5
+
+# Notifications
+notifications:
+  email:
+    enabled: false
+    smtp_server: "smtp.example.com"
+    smtp_port: 587
+  webhook:
+    enabled: false
+    url: "http://localhost:5000/webhook"
+
+# Security Settings (for production)
+security:
+  allowed_hosts:
+    - "localhost"
+    - "127.0.0.1"
+  cors_origins:
+    - "http://localhost:5000"
+  rate_limiting:
+    enabled: false
+    requests_per_minute: 60

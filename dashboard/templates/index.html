@@ -1,0 +1,162 @@
+{% extends "base.html" %} {% block title %}Dashboard - Security Audit Lab{%
+endblock %} {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+  <button class="btn btn-primary" onclick="refreshData()">
+    <i class="fas fa-sync-alt"></i> Refresh
+  </button>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="stat-card total">
+      <p>Total Scans</p>
+      <h3>{{ total_scans }}</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card critical">
+      <p>Critical</p>
+      <h3>{{ critical_vulns }}</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card high">
+      <p>High</p>
+      <h3>{{ high_vulns }}</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card medium">
+      <p>Medium</p>
+      <h3>{{ medium_vulns }}</h3>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Vulnerability Distribution Chart -->
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <i class="fas fa-chart-pie"></i> Vulnerability Distribution
+        </h5>
+      </div>
+      <div class="card-body">
+        <div id="severityChart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scan Timeline -->
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <i class="fas fa-chart-bar"></i> Scan Activity
+        </h5>
+      </div>
+      <div class="card-body">
+        <div id="scanChart"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Scans Table -->
+<div class="card mt-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0"><i class="fas fa-history"></i> Recent Scans</h5>
+    <a href="/scans" class="btn btn-sm btn-outline-primary">View All</a>
+  </div>
+  <div class="card-body table-card">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Target</th>
+          <th>Start Time</th>
+          <th>Duration</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for scan in recent_scans %}
+        <tr
+          onclick="window.location='/scan/{{ scan.id }}'"
+          style="cursor: pointer"
+        >
+          <td>{{ scan.id }}</td>
+          <td>
+            <span class="badge bg-info">{{ scan.scan_type }}</span>
+          </td>
+          <td>{{ scan.target }}</td>
+          <td>{{ scan.start_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td>{{ "%.2f"|format(scan.duration) }}s</td>
+          <td>
+            {% if scan.status == 'completed' %}
+            <span class="badge bg-success">Completed</span>
+            {% elif scan.status == 'running' %}
+            <span class="badge bg-warning">Running</span>
+            {% else %}
+            <span class="badge bg-danger">Failed</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" class="text-center text-muted">
+            No scans yet. Run a scan to get started.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // Severity Distribution Pie Chart
+  const severityData = {
+      labels: ['Critical', 'High', 'Medium', 'Low', 'Info'],
+      values: [
+          {{ severity_dist.critical }},
+          {{ severity_dist.high }},
+          {{ severity_dist.medium }},
+          {{ severity_dist.low }},
+          {{ severity_dist.info }}
+      ],
+      type: 'pie',
+      marker: {
+          colors: ['#e74c3c', '#f39c12', '#f1c40f', '#27ae60', '#17a2b8']
+      }
+  };
+
+  Plotly.newPlot('severityChart', [severityData], {
+      margin: { t: 20, b: 20, l: 20, r: 20 }
+  });
+
+  // Scan Activity Bar Chart (sample data)
+  const scanData = {
+      x: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      y: [5, 8, 3, 12, 7, 2, 4],
+      type: 'bar',
+      marker: {
+          color: '#3498db'
+      }
+  };
+
+  Plotly.newPlot('scanChart', [scanData], {
+      margin: { t: 20, b: 40, l: 40, r: 20 },
+      xaxis: { title: 'Day' },
+      yaxis: { title: 'Scans' }
+  });
+
+  function refreshData() {
+      location.reload();
+  }
+</script>
+{% endblock %}
